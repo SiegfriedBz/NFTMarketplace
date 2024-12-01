@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useTheme } from "../context/ThemeContext";
 import axios from "axios";
-import Image from "next/image";
 import { Sun, Moon } from "lucide-react";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import dynamic from "next/dynamic";
+import { Badge } from "@/components/ui/badge";
+import useSolBalance from "../hooks/useSolBalance";
 
 // Dynamically load WalletMultiButton to ensure it is only rendered on the client side
 const DynamicWalletMultiButton = dynamic(
@@ -21,6 +21,8 @@ const DynamicWalletMultiButton = dynamic(
 const NavBar = () => {
   const { theme, toggleTheme } = useTheme();
   const [username, setUsername] = useState<string | null>(null);
+
+  const solBbalance = useSolBalance();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -83,6 +85,14 @@ const NavBar = () => {
               <Sun className="w-5 h-5 text-white" />
             )}
           </button>
+
+          {solBbalance && (
+            <Badge variant="outline" className="px-4 py-2">
+              <span className="text-white font-extrabold text-base">
+                {solBbalance} SOL
+              </span>
+            </Badge>
+          )}
           <DynamicWalletMultiButton />
         </div>
       </div>
